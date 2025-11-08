@@ -1,5 +1,5 @@
 import asyncio
-# import logging
+import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
@@ -14,7 +14,7 @@ from middlewares.subscription import CheckSubscriptionMiddleware
 from services.scheduler import setup_scheduler
 
 async def main():
-    # logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 
     # Создаем таблицы в БД при запуске
     await create_tables()
