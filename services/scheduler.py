@@ -48,7 +48,7 @@ async def process_daily_results_and_reset(session_factory: async_sessionmaker, b
         
         # 5. Сбрасываем очки для всех
         await reset_all_scores(session)
-        print("Ежедневные результаты обработаны, очки сброшены.")
+        # print("Ежедневные результаты обработаны, очки сброшены.")
 
 
 async def refresh_attempts_job(session_factory: async_sessionmaker):
@@ -74,4 +74,4 @@ def setup_scheduler(session_factory: async_sessionmaker, bot: Bot):
     )
 
     scheduler.start()
-    print("Scheduler has been started.")
+    # print("Scheduler has been started.")

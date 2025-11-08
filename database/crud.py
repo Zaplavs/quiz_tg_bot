@@ -46,7 +46,7 @@ async def refresh_daily_attempts(session: AsyncSession):
     await session.execute(stmt)
     await session.commit()
     # Эта строка нужна для отладки
-    print("INFO: Daily attempts have been refreshed.")
+    # print("INFO: Daily attempts have been refreshed.")
 
 async def get_top_users(session: AsyncSession, limit: int = 10) -> list[User]:
     """
