@@ -46,7 +46,7 @@ async def show_rating(message: Message, session: AsyncSession):
 
     if not top_players:
         await message.answer(
-            f"🏆 <b>Рейтинг недели</b> 🏆\n\n"
+            f"🏆 <b>Рейтинг дня</b> 🏆\n\n"
             f"До обновления: <b>{time_left_str}</b>\n\n"
             f"Пока что в рейтинге никого нет. Станьте первым!"
         )
