@@ -53,7 +53,7 @@ async def show_rating(message: Message, session: AsyncSession):
         return
 
     rating_message = (
-        f"🏆 <b>Топ-10 игроков недели</b> 🏆\n\n"
+        f"🏆 <b>Топ-10 игроков дня</b> 🏆\n\n"
         f"До обновления: <b>{time_left_str}</b>\n\n"
     )
     
