@@ -66,7 +66,7 @@ async def start_quiz(message: Message, session: AsyncSession, state: FSMContext)
     user, _ = await get_or_create_user(session, message.from_user.id, message.from_user.full_name, message.from_user.username)
 
     if user.attempts_left <= 0:
-        await message.answer("У вас закончились попытки на сегодня. Возвращайтесь завтра!")
+        await message.answer("У вас закончились попытки на сегодня. Возвращайтесь завтра!\n\n💡 <b>Совет:</b> Чтобы получить дополнительные попытки, воспользуйтесь реферальной системой! Нажмите «Пригласить друга 🤝» в главном меню.")
         return
     
     await decrease_user_attempts(session, user.user_id)
