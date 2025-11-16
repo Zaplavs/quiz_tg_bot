@@ -10,6 +10,7 @@ from handlers import common, quiz, service   # Импортируем роуте
 from database.engine import create_tables, session_factory
 from middlewares.db import DatabaseSessionMiddleware
 from middlewares.subscription import CheckSubscriptionMiddleware 
+from handlers.admin import router as admin_router
 
 from services.scheduler import setup_scheduler
 
@@ -26,7 +27,7 @@ async def main():
     dp = Dispatcher()
 
     # --- Регистрируем middleware ---
-    # Этот middleware будет создавать сессию для каждого обработчика
+    # Этот middleware будет создавать сессию для каждого обработчика 
     dp.update.middleware(DatabaseSessionMiddleware(session_pool=session_factory))
     dp.message.middleware(CheckSubscriptionMiddleware())
     dp.callback_query.middleware(CheckSubscriptionMiddleware())
@@ -34,6 +35,7 @@ async def main():
     dp.include_router(service.router)
     dp.include_router(common.router)
     dp.include_router(quiz.router)
+    dp.include_router(admin_router)
 
     # Передаем ему фабрику сессий, чтобы он мог работать с БД
     setup_scheduler(session_factory, bot)
