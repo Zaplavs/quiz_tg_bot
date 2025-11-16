@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, String, func
+from sqlalchemy import BigInteger, String, func, Boolean
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -22,6 +22,7 @@ class User(Base):
 
     invited_by_id: Mapped[int] = mapped_column(BigInteger, nullable=True)
     
+    is_win: Mapped[bool] = mapped_column(Boolean, default=False, server_default='false')
     # Дата регистрации с автоматическим заполнением
     registration_date: Mapped[datetime] = mapped_column(server_default=func.now())
 

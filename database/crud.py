@@ -50,18 +50,21 @@ async def refresh_daily_attempts(session: AsyncSession):
 
 async def get_top_users(session: AsyncSession, limit: int = 10) -> list[User]:
     """
-    Получает топ-N пользователей, отсортированных по best_score.
+    Получает топ-N пользователей, которые ЕЩЕ НЕ ПОБЕЖДАЛИ на этой неделе,
+    отсортированных по best_score.
     """
     # Создаем запрос для выбора пользователей
     stmt = (
         select(User)
-        .where(User.best_score > 0)  # Исключаем тех, у кого 0 очков
-        .order_by(User.best_score.desc()) # Сортируем по очкам (по убыванию)
-        .limit(limit) # Ограничиваем количество результатов
+        # --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
+        # Добавляем условие, чтобы в рейтинг попадали только те, кто еще может претендовать на приз
+        .where(User.is_win == False, User.best_score > 0)
+        
+        .order_by(User.best_score.desc())
+        .limit(limit)
     )
     
     result = await session.execute(stmt)
-    # .scalars().all() вернет список объектов User
     return result.scalars().all()
 
 async def decrease_user_attempts(session: AsyncSession, user_id: int):
@@ -97,3 +100,35 @@ async def add_referral_attempt(session: AsyncSession, user_id: int):
     )
     await session.execute(stmt)
     await session.commit()
+
+async def reset_weekly_win_status(session: AsyncSession):
+    """
+    Сбрасывает еженедельный статус победителя (is_win) для всех пользователей.
+    """
+    stmt = update(User).values(is_win=False)
+    await session.execute(stmt)
+    await session.commit()
+    print("Weekly win statuses have been reset.")
+
+async def get_daily_winners(session: AsyncSession) -> list[User]:
+    """
+    Получает топ-3 игроков дня, которые еще НЕ выигрывали на этой неделе.
+    """
+    # Создаем запрос для выбора пользователей
+    stmt = (
+        select(User)
+        # --- КЛЮЧЕВОЕ ОТЛИЧИЕ ---
+        # Мы добавляем условие, чтобы выбирать только тех, у кого is_win = False
+        # и у кого очков больше нуля.
+        .where(User.is_win == False, User.best_score > 0)
+        
+        # Сортируем по очкам (по убыванию)
+        .order_by(User.best_score.desc())
+        
+        # Ограничиваем количество результатов тремя победителями
+        .limit(3)
+    )
+    
+    result = await session.execute(stmt)
+    # .scalars().all() вернет список объектов User
+    return result.scalars().all()
